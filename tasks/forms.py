@@ -6,3 +6,6 @@ class TaskForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['title', 'description', 'status']
+        widgets = {
+            'status': forms.Select(choices=Task.STATUS_CHOICES),
+        }

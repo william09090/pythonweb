@@ -6,23 +6,21 @@ from .models import Task
 from .forms import TaskForm
 from django.contrib.auth.decorators import login_required
 
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Sua conta foi criada com sucesso! Faça login agora.')
-            return redirect('login')
+            user = form.save()
+            login(request, user)
+            return redirect('login')  # Substitua 'home' pelo nome da URL para onde deseja redirecionar
     else:
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
-
-@login_required
-def task_list(request):
-    tasks = Task.objects.filter(assigned_to=request.user)
-    return render(request, 'task_list.html', {'tasks': tasks})
 
 @login_required
 def task_create(request):
@@ -35,7 +33,7 @@ def task_create(request):
             return redirect('task_list')
     else:
         form = TaskForm()
-    return render(request, 'task_form.html', {'form': form})
+    return render(request, 'task_form.html', {'form': form, 'action': 'Create'})
 
 @login_required
 def task_edit(request, pk):
@@ -47,7 +45,7 @@ def task_edit(request, pk):
             return redirect('task_list')
     else:
         form = TaskForm(instance=task)
-    return render(request, 'task_form.html', {'form': form})
+    return render(request, 'task_form.html', {'form': form, 'action': 'Edit'})
 
 @login_required
 def task_delete(request, pk):
@@ -56,6 +54,11 @@ def task_delete(request, pk):
         task.delete()
         return redirect('task_list')
     return render(request, 'task_confirm_delete.html', {'task': task})
+
+@login_required
+def task_list(request):
+    tasks = Task.objects.filter(assigned_to=request.user)
+    return render(request, 'task_list.html', {'tasks': tasks})
 
 
 @login_required
