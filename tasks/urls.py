@@ -5,16 +5,12 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', views.dashboard, name='dashboard'),
     path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
     path('register/', views.register, name='register'),
     path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
     path('', views.task_list, name='task_list'),
-    path('create/', views.task_create, name='task_create'),
-    path('<int:pk>/edit/', views.task_edit, name='task_edit'),
-    path('<int:pk>/delete/', views.task_delete, name='task_delete'),
-    path('tasks/', views.task_list, name='task_list'),
-    path('tasks/create/', views.task_create, name='task_create'),
-    path('tasks/<int:pk>/edit/', views.task_edit, name='task_edit'),
-    path('tasks/<int:pk>/delete/', views.task_delete, name='task_delete'),
+    path('task/new/', views.task_create, name='task_create'),
+    path('task/<int:pk>/edit/', views.task_edit, name='task_edit'),
+    path('task/<int:pk>/delete/', views.task_delete, name='task_delete'),
+
 ]

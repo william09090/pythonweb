@@ -1,11 +1,11 @@
 from django import forms
 from .models import Task
 
-
+# Formulário para Task
 class TaskForm(forms.ModelForm):
     class Meta:
-        model = Task
-        fields = ['title', 'description', 'status']
+        model = Task  # Referência ao modelo Task
+        fields = ['title', 'description', 'status', 'assigned_to']  # Campos disponíveis no formulário
         widgets = {
-            'status': forms.Select(choices=Task.STATUS_CHOICES),
+            'status': forms.Select(),  # O Django automaticamente usa as choices do modelo Task
         }
